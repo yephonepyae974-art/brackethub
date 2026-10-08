@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BracketHub
 
-## Getting Started
+BracketHub is a web-based E-sports Tournament Management System built with Next.js and MongoDB.
 
-First, run the development server:
+The system allows tournament organizers to create tournaments, register teams, schedule matches, record match results, and track tournament progress through a tournament bracket.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Visitors can also view tournaments, participating teams, match results, and tournament brackets.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Dashboard
+- View total tournaments
+- View total registered teams
+- View total matches
+- View scheduled, ongoing, and completed match statistics
+- View recent matches
+- Quick access to tournament management features
 
-## Learn More
+### Tournament Management
+- Create tournaments
+- View all tournaments
+- View tournament details
+- Edit tournament information
+- Delete tournaments
+- Prevent deletion when teams or matches are still connected to a tournament
+- Track tournament status:
+  - Upcoming
+  - Ongoing
+  - Completed
 
-To learn more about Next.js, take a look at the following resources:
+### Team Management
+- Register teams
+- Assign teams to tournaments
+- View registered teams
+- Filter teams by tournament
+- Edit team information
+- Delete teams
+- Prevent deletion when a team is currently used in a match
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Match Management
+- Schedule matches
+- Select teams from a tournament
+- View scheduled matches
+- Filter matches by tournament
+- Edit match information
+- Record match scores
+- Automatically determine the winner
+- Track match status:
+  - Scheduled
+  - Ongoing
+  - Completed
+- Delete matches
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Tournament Bracket
+BracketHub supports an 8-team tournament structure:
 
-## Deploy on Vercel
+Quarter Finals → Semi Finals → Final → Champion
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The system allows only qualified teams to progress to the next round.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 4 Quarter Final matches
+- 2 Semi Final matches
+- 1 Final match
+- Winner progression
+- Tournament champion display
+
+---
+
+## Technology Stack
+
+### Frontend
+- Next.js
+- React
+- JavaScript
+- CSS
+
+### Backend
+- Next.js REST API
+- Node.js
+
+### Database
+- MongoDB
+- Official MongoDB Node.js Driver
+
+### Development Tools
+- Visual Studio Code
+- Git
+- GitHub
+- npm
+
+---
+
+## Main Data Models
+
+BracketHub uses three main MongoDB collections.
+
+### Tournament
+
+Example fields:
+
+```text
+name
+game
+description
+startDate
+endDate
+status
+createdAt
+updatedAt
