@@ -10,6 +10,7 @@ Visitors can also view tournaments, participating teams, match results, and tour
 Team Members GitHub Repository:
 
 https://github.com/yephonepyae974-art/brackethub
+https://github.com/natzusss/brackethub
 ---
 
 ## Features
