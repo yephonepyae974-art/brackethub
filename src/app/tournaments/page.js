@@ -7,13 +7,11 @@ export default function TournamentsPage() {
     const [tournaments, setTournaments] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
+    // LOAD TOURNAMENTS
     useEffect(() => {
         async function initialLoad() {
             try {
-                const response = await fetch(
-                    "/api/tournaments"
-                );
+                const response = await fetch("/api/tournaments");
 
                 const data = await response.json();
 
@@ -39,8 +37,7 @@ export default function TournamentsPage() {
         initialLoad();
     }, []);
 
-
-    // DELETE tournament
+    // DELETE TOURNAMENT
     async function handleDelete(id) {
         const confirmed = window.confirm(
             "Are you sure you want to delete this tournament?"
@@ -62,8 +59,15 @@ export default function TournamentsPage() {
                 return;
             }
 
-            // Load the tournaments again after deleting
-            await loadTournaments();
+            // Update tournament list after successful deletion
+            setTournaments((previous) =>
+                previous.filter(
+                    (tournament) => tournament._id !== id
+                )
+            );
+
+            alert("Tournament deleted successfully!");
+
         } catch (error) {
             console.error("Delete error:", error);
             alert("Something went wrong");
@@ -78,7 +82,10 @@ export default function TournamentsPage() {
                     <p>Manage all e-sports tournaments.</p>
                 </div>
 
-                <Link href="/tournaments/create" className="primaryButton">
+                <Link
+                    href="/tournaments/create"
+                    className="primaryButton"
+                >
                     + Create Tournament
                 </Link>
             </div>
@@ -90,19 +97,25 @@ export default function TournamentsPage() {
             ) : tournaments.length === 0 ? (
                 <div className="emptyState">
                     <h2>No tournaments yet</h2>
-                    <p>Create your first tournament to get started.</p>
+                    <p>
+                        Create your first tournament to get started.
+                    </p>
                 </div>
             ) : (
                 <div className="tournamentGrid">
                     {tournaments.map((tournament) => (
-                        <div className="tournamentCard" key={tournament._id}>
+                        <div
+                            className="tournamentCard"
+                            key={tournament._id}
+                        >
                             <div className="cardTop">
                                 <span className="gameBadge">
                                     {tournament.game}
                                 </span>
 
                                 <span
-                                    className={`statusBadge ${tournament.status.toLowerCase()}`}
+                                    className={`statusBadge ${tournament.status.toLowerCase()
+                                        }`}
                                 >
                                     {tournament.status}
                                 </span>
@@ -116,11 +129,13 @@ export default function TournamentsPage() {
 
                             <div className="tournamentDates">
                                 <p>
-                                    <strong>Start:</strong> {tournament.startDate}
+                                    <strong>Start:</strong>{" "}
+                                    {tournament.startDate}
                                 </p>
 
                                 <p>
-                                    <strong>End:</strong> {tournament.endDate}
+                                    <strong>End:</strong>{" "}
+                                    {tournament.endDate}
                                 </p>
                             </div>
 
