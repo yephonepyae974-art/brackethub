@@ -9,8 +9,13 @@ Visitors can also view tournaments, participating teams, match results, and tour
 
 Team Members GitHub Repository:
 
+Ye Phone Pyae : 
 https://github.com/yephonepyae974-art/brackethub
+
+Khun Ye Htet: 
 https://github.com/natzusss/brackethub
+
+Aunt Htoo Lin Win:
 https://github.com/Avanshorty/tour_ment
 ---
 
