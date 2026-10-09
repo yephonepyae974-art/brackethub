@@ -104,47 +104,6 @@ https://brackethub-psi.vercel.app/
 ---
 
 
-## Installation and Setup
-### Requirements
-- Node.js
-- npm
-- MongoDB Atlas database
-- Git
-
-### Step 1: Clone the Repository
-```bash
-git clone https://github.com/yephonepyae974-art/brackethub.git
-```
-
-### Step 2: Open the Project
-```bash
-cd brackethub
-```
-
-### Step 3: Install Dependencies
-```bash
-npm install
-```
-
-### Step 4: Configure Environment Variables
-Create a `.env.local` file in the project root.
-```env
-MONGODB_URI=your_mongodb_connection_string
-MONGODB_DB=your_database_name
-```
-Replace the example values with your own MongoDB Atlas credentials.
-
-### Step 5: Run the Application
-```bash
-npm run dev
-```
-
-### Step 6: Open the Website
-Visit:
-http://localhost:3000
-
----
-
 ## Deployment
 BracketHub is deployed using Vercel.
 - Frontend: Next.js
@@ -162,13 +121,20 @@ BracketHub is deployed using Vercel.
 
 
 ### Tournament Management
-![Tournaments](screenshots/tournaments.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/320647fd-7cda-4576-932e-2f2a5a83d8bd" />
+
 
 ### Team Management
-![Teams](screenshots/teams.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/e3bc0037-6613-41cf-8a3f-51ccc107d1e8" />
+
 
 ### Match Management
-![Matches](screenshots/matches.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/2b1590a3-b2bc-4770-9e45-2a5c11fa4dab" />
+
 
 ### Tournament Bracket
-![Bracket](screenshots/bracket.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/03cd2d16-37af-429f-a84f-69b42c71f83d" />
+
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/2533ab97-a4ba-423c-bcb6-90807fc227c2" />
+
+
