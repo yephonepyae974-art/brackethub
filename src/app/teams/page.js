@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,36 +8,30 @@ export default function TeamsPage() {
     const [teams, setTeams] = useState([]);
     const [tournaments, setTournaments] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    // Tournament filter
-    const [selectedTournament, setSelectedTournament] =
-        useState("ALL");
+    const [selectedTournament, setSelectedTournament] = useState("ALL");
+    const [searchTerm, setSearchTerm] = useState("");
 
     // Load teams and tournaments
     useEffect(() => {
         async function initialLoad() {
             try {
-                const [
-                    teamsResponse,
-                    tournamentsResponse,
-                ] = await Promise.all([
-                    fetch("/api/teams"),
-                    fetch("/api/tournaments"),
-                ]);
+                const [teamsResponse, tournamentsResponse] =
+                    await Promise.all([
+                        fetch("/api/teams"),
+                        fetch("/api/tournaments"),
+                    ]);
 
-                const teamsData =
-                    await teamsResponse.json();
+                if (!teamsResponse.ok || !tournamentsResponse.ok) {
+                    throw new Error("Failed to load data");
+                }
 
-                const tournamentsData =
-                    await tournamentsResponse.json();
+                const teamsData = await teamsResponse.json();
+                const tournamentsData = await tournamentsResponse.json();
 
                 setTeams(teamsData);
                 setTournaments(tournamentsData);
             } catch (error) {
-                console.error(
-                    "Failed to load teams:",
-                    error
-                );
+                console.error("Failed to load teams:", error);
             } finally {
                 setLoading(false);
             }
@@ -56,35 +51,22 @@ export default function TeamsPage() {
         }
 
         try {
-            const response = await fetch(
-                `/api/teams/${id}`,
-                {
-                    method: "DELETE",
-                }
-            );
+            const response = await fetch(`/api/teams/${id}`, {
+                method: "DELETE",
+            });
 
             const data = await response.json();
 
             if (!response.ok) {
-                alert(
-                    data.message ||
-                    "Failed to delete team"
-                );
+                alert(data.message || "Failed to delete team");
                 return;
             }
 
-            // Remove deleted team from UI
             setTeams((currentTeams) =>
-                currentTeams.filter(
-                    (team) => team._id !== id
-                )
+                currentTeams.filter((team) => team._id !== id)
             );
         } catch (error) {
-            console.error(
-                "Delete team error:",
-                error
-            );
-
+            console.error("Delete team error:", error);
             alert("Something went wrong");
         }
     }
@@ -92,8 +74,7 @@ export default function TeamsPage() {
     // Get tournament name
     function getTournamentName(tournamentId) {
         const tournament = tournaments.find(
-            (tournament) =>
-                tournament._id === tournamentId
+            (tournament) => tournament._id === tournamentId
         );
 
         return tournament
@@ -101,27 +82,29 @@ export default function TeamsPage() {
             : "Unknown Tournament";
     }
 
-    // Filter teams by selected tournament
-    const filteredTeams =
-        selectedTournament === "ALL"
-            ? teams
-            : teams.filter(
-                (team) =>
-                    team.tournamentId ===
-                    selectedTournament
-            );
+    // Filter teams by tournament and search
+    const filteredTeams = teams.filter((team) => {
+        const matchesTournament =
+            selectedTournament === "ALL" ||
+            team.tournamentId === selectedTournament;
+
+        const search = searchTerm.trim().toLowerCase();
+
+        const matchesSearch =
+            (team.name || "").toLowerCase().includes(search) ||
+            (team.captainName || "").toLowerCase().includes(search);
+
+        return matchesTournament && matchesSearch;
+    });
 
     return (
         <main className="pageContainer">
-
             {/* Page Header */}
             <div className="pageHeader">
                 <div>
                     <h1>Teams</h1>
-
                     <p>
-                        Manage teams registered for
-                        tournaments.
+                        Manage teams registered for tournaments.
                     </p>
                 </div>
 
@@ -139,10 +122,8 @@ export default function TeamsPage() {
                     <label htmlFor="teamTournamentFilter">
                         Tournament
                     </label>
-
                     <p>
-                        Select a tournament to view its
-                        registered teams.
+                        Select a tournament to view its registered teams.
                     </p>
                 </div>
 
@@ -152,36 +133,60 @@ export default function TeamsPage() {
                         className="tournamentSelect"
                         value={selectedTournament}
                         onChange={(event) =>
-                            setSelectedTournament(
-                                event.target.value
-                            )
+                            setSelectedTournament(event.target.value)
                         }
                     >
                         <option value="ALL">
                             All Tournaments
                         </option>
 
-                        {tournaments.map(
-                            (tournament) => (
-                                <option
-                                    key={tournament._id}
-                                    value={tournament._id}
-                                >
-                                    {tournament.name}
-                                </option>
-                            )
-                        )}
+                        {tournaments.map((tournament) => (
+                            <option
+                                key={tournament._id}
+                                value={tournament._id}
+                            >
+                                {tournament.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
+            </div>
+
+            {/* Team Search */}
+            <div className="filterSection">
+                <div className="filterInfo">
+                    <label htmlFor="teamSearch">
+                        Search Teams
+                    </label>
+                    <p>
+                        Search by team name or captain name.
+                    </p>
+                </div>
+
+                <input
+                    id="teamSearch"
+                    type="search"
+                    placeholder="Search teams..."
+                    value={searchTerm}
+                    onChange={(event) =>
+                        setSearchTerm(event.target.value)
+                    }
+                    style={{
+                        padding: "12px",
+                        borderRadius: "8px",
+                        border: "1px solid #ccc",
+                        width: "100%",
+                        maxWidth: "300px",
+                        color: "#111",
+                        backgroundColor: "#fff",
+                    }}
+                />
             </div>
 
             {/* Result Count */}
             {!loading && (
                 <div className="filterResult">
-                    <span>
-                        {filteredTeams.length}
-                    </span>
-
+                    <span>{filteredTeams.length}</span>
                     {filteredTeams.length === 1
                         ? " team"
                         : " teams"}
@@ -191,7 +196,7 @@ export default function TeamsPage() {
                 </div>
             )}
 
-            {/* Loading */}
+            {/* Team List */}
             {loading ? (
                 <div className="emptyState">
                     <h2>Loading teams...</h2>
@@ -199,10 +204,8 @@ export default function TeamsPage() {
             ) : teams.length === 0 ? (
                 <div className="emptyState">
                     <h2>No teams registered yet</h2>
-
                     <p>
-                        Register the first team to get
-                        started.
+                        Register the first team to get started.
                     </p>
 
                     <Link
@@ -214,25 +217,24 @@ export default function TeamsPage() {
                 </div>
             ) : filteredTeams.length === 0 ? (
                 <div className="emptyState">
-                    <h2>
-                        No teams in this tournament
-                    </h2>
-
+                    <h2>No matching teams found</h2>
                     <p>
-                        Register a team for this tournament
-                        to get started.
+                        Try another search or select a different tournament.
                     </p>
 
-                    <Link
-                        href="/teams/create"
+                    <button
+                        type="button"
                         className="primaryButton"
+                        onClick={() => {
+                            setSearchTerm("");
+                            setSelectedTournament("ALL");
+                        }}
                     >
-                        + Register Team
-                    </Link>
+                        Clear Filters
+                    </button>
                 </div>
             ) : (
                 <div className="teamGrid">
-
                     {filteredTeams.map((team) => (
                         <div
                             className="teamCard"
@@ -257,16 +259,12 @@ export default function TeamsPage() {
                             {/* Team Information */}
                             <div className="teamInfo">
                                 <p>
-                                    <strong>
-                                        Captain:
-                                    </strong>{" "}
+                                    <strong>Captain:</strong>{" "}
                                     {team.captainName}
                                 </p>
 
                                 <p>
-                                    <strong>
-                                        Email:
-                                    </strong>{" "}
+                                    <strong>Email:</strong>{" "}
                                     {team.contactEmail}
                                 </p>
                             </div>
@@ -284,9 +282,7 @@ export default function TeamsPage() {
                                     type="button"
                                     className="deleteButton"
                                     onClick={() =>
-                                        handleDelete(
-                                            team._id
-                                        )
+                                        handleDelete(team._id)
                                     }
                                 >
                                     Delete
@@ -294,7 +290,6 @@ export default function TeamsPage() {
                             </div>
                         </div>
                     ))}
-
                 </div>
             )}
         </main>
